@@ -1,0 +1,51 @@
+name: Update to latest Picturesque release
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine latest upstream release
+        id: latest
+        run: |
+          set -eu
+          version=$(curl -fsSL https://api.github.com/repos/denyszorinets/picturesque/releases/latest | jq -r .tag_name)
+          version=${version#v}
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Latest Picturesque release: $version"
+
+      - name: Update spec
+        run: python3 scripts/update-version.py "${{ steps.latest.outputs.version }}"
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          if git diff --quiet; then
+            echo "No update needed."
+            exit 0
+          fi
+          version="${{ steps.latest.outputs.version }}"
+          branch="update-picturesque-${version}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add picturesque.spec
+          git commit -m "Update to Picturesque ${version}"
+          git push origin "$branch"
+          gh pr create \
+            --title "Update to Picturesque ${version}" \
+            --body "Automated update to upstream release ${version}. Merging triggers a COPR rebuild." \
+            --base main \
+            --head "$branch"
