@@ -1,0 +1,11 @@
+# Downloaded upstream sources and build artifacts
+sources/
+srpms/
+rpms/
+*.src.rpm
+*.log
+!build-status.log
+
+# Editor and OS noise
+*~
+.DS_Store

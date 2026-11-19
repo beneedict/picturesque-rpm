@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories=Graphics;Photography;
+Comment=Cull photos: series, best shots and local AI
+Exec=picturesque-desktop
+StartupWMClass=picturesque-desktop
+Icon=picturesque-desktop
+Name=Picturesque
+Terminal=false
+Type=Application
