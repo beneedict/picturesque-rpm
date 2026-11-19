@@ -5,6 +5,19 @@ für Fedora. COPR baut das RPM und stellt es als `dnf`-Repository bereit:
 
 https://copr.fedorainfracloud.org/coprs/beneedict/picturesque/
 
+Aktuell gebaut für Fedora 44, 45 und Rawhide (x86_64).
+
+## Build-Status
+
+Build [11362640](https://copr.fedorainfracloud.org/coprs/build/11362640)
+war am 2026-11-19 für alle drei Chroots erfolgreich:
+
+| Chroot | RPM |
+|---|---|
+| Fedora 44 | `picturesque-0.2.0-1.fc44.x86_64.rpm` |
+| Fedora 45 | `picturesque-0.2.0-1.fc45.x86_64.rpm` |
+| Rawhide | `picturesque-0.2.0-1.fc46.x86_64.rpm` |
+
 ## Installation
 
 ```bash
