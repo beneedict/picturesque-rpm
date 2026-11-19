@@ -43,9 +43,13 @@ jobs:
           git checkout -b "$branch"
           git add picturesque.spec
           git commit -m "Update to Picturesque ${version}"
-          git push origin "$branch"
-          gh pr create \
-            --title "Update to Picturesque ${version}" \
-            --body "Automated update to upstream release ${version}. Merging triggers a COPR rebuild." \
-            --base main \
-            --head "$branch"
+          git push --force origin "$branch"
+          if gh pr view "$branch" --json number >/dev/null 2>&1; then
+            echo "Pull request for $branch already exists."
+          else
+            gh pr create \
+              --title "Update to Picturesque ${version}" \
+              --body "Automated update to upstream release ${version}. Merging triggers a COPR rebuild." \
+              --base main \
+              --head "$branch"
+          fi
